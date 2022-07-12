@@ -1,6 +1,6 @@
 const mongoose = require ('mongoose');
 const config = require('config');
-const db = config.get('mongoURI');//: / ? # [ ] @ the special in the uri need to be converted using percent encoding
+const db = config.get('mongoURI');//: / ? # [ ] @ the special characters in the uri need to be converted using percent encoding
 
 const connectDB = async () => {
     try {
