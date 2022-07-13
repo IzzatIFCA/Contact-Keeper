@@ -1,3 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://IzzatIFCA:Izzat%40ifca1@contactkeeper.n220v.mongodb.net/?retryWrites=true&w=majority"
+    "mongoURI":"mongodb+srv://IzzatIFCA:Izzat%40ifca1@contactkeeper.n220v.mongodb.net/?retryWrites=true&w=majority",
+    "jwtSecret": "secret"
 }

@@ -1,8 +1,12 @@
+const express = require('express');
+const router = express.Router();
+
 const { check, validationResult } = require('express-validator');
 const User = require('../models/Users');
-const express = require('express');
 const bcrypt = require('bcryptjs');
-const router = express.Router();
+const jwt = require('jsonwebtoken');
+const config = require('config');
+
 
 //@route    POST api/users
 //@desc     Register a user
@@ -10,14 +14,14 @@ const router = express.Router();
 router.post(
     '/',
     [
-        check('name', 'Name is required ')
+        check('name', 'Please add name')
             .not()
             .isEmpty(),
-        check(  'email', 
-                'please include a valid email').isEmail(),
-        check(  'password', 
-                'Please a password with 6 or more characters'
-                ).isLength({min:6})
+        check(  'email', 'Please include a valid email').isEmail(),
+        check(  
+            'password', 
+            'Please a password with 6 or more characters'
+            ).isLength({min:6})
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -39,9 +43,22 @@ router.post(
             user.password = await bcrypt.hash(password, salt);
             await user.save();
 
-            res.send('user saved');
+            const payload={
+                user:{
+                    id: user.id
+                }
+            };
 
-        }catch(err){
+            jwt.sign(
+                payload, 
+                config.get('jwtSecret'),
+                {expiresIn: 360000},
+                (err, token) => {
+                    if(err) throw(err);
+                    res.json({token})
+                }
+            );
+        } catch(err){
             console.error(err.message);
             res.status(500).send('Server Error');
         }
